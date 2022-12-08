@@ -15,7 +15,7 @@ class ListingsController extends Controller
      */
     public function index()
     {
-        return view('pages.listings', [
+        return view('pages.listings.index', [
             'heading' => 'Latest Listings',
             'listings' => Listings::all()
         ]);
@@ -52,7 +52,7 @@ class ListingsController extends Controller
     {
         $listing = $listings->findOrfail($id);
 
-        return view('pages.listing', [
+        return view('pages.listings.show', [
             'listing' => $listing
         ]);
     }
