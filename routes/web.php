@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\ListingsController;
+use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -24,5 +25,15 @@ use Illuminate\Support\Facades\Route;
 // destroy - Delete listings
 
 Route::get('/', [ListingsController::class, 'index'])->name('home');
+
+Route::get('/register', [UserController::class, 'register'])->name('register');
+
+Route::get('/login', [UserController::class, 'login'])->name('login');
+
+Route::post('/login', [UserController::class, 'authenticate'])->name('authenticate-user');
+
+Route::post('/logout', [UserController::class, 'logout'])->name('logout-user');
+
+Route::post('/register/store', [UserController::class, 'store'])->name('store');
 
 Route::resource('listings', ListingsController::class);
