@@ -24,7 +24,11 @@ class UpdateListingsRequest extends FormRequest
     public function rules()
     {
         return [
-            //
+            'title' => 'max:100',
+            'location' => 'max:100',
+            'email' => 'email',
+            'website' => 'max:100',
+            'logo' => 'file|image',
         ];
     }
 }

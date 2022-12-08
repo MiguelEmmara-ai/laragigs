@@ -7,6 +7,7 @@ use App\Http\Requests\UpdateListingsRequest;
 use App\Models\Listings;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Redirect;
+use Illuminate\Support\Facades\Storage;
 
 class ListingsController extends Controller
 {
@@ -46,6 +47,7 @@ class ListingsController extends Controller
     {
         $formFields = $request->all();
 
+        // Save image file to storage/logos
         if ($request->hasFile('logo')) {
             $formFields['logo'] = $request->file('logo')->store('logos', 'public');
         }
@@ -77,9 +79,13 @@ class ListingsController extends Controller
      * @param  \App\Models\Listings  $listings
      * @return \Illuminate\Http\Response
      */
-    public function edit(Listings $listings)
+    public function edit(Listings $listings, $id)
     {
-        //
+        $listing = $listings->findOrfail($id);
+
+        return view('pages.listings.edit', [
+            'listing' => $listing
+        ]);
     }
 
     /**
@@ -89,9 +95,24 @@ class ListingsController extends Controller
      * @param  \App\Models\Listings  $listings
      * @return \Illuminate\Http\Response
      */
-    public function update(UpdateListingsRequest $request, Listings $listings)
+    public function update(UpdateListingsRequest $request, $id)
     {
-        //
+        $formFields = $request->all();
+
+        $listing = Listings::findOrFail($id);
+
+        // Save logo file to storage/logos
+        if ($request->hasFile('logo')) {
+            // Will delete existing logo before storing new logos
+            if ($listing->logo) {
+                Storage::delete($listing->logo);
+            }
+            $formFields['logo'] = $request->file('logo')->store('logos', 'public');
+        }
+
+        $listing->update($formFields);
+
+        return back()->with('success', "Success Update Listing");
     }
 
     /**
@@ -100,8 +121,18 @@ class ListingsController extends Controller
      * @param  \App\Models\Listings  $listings
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Listings $listings)
+    public function destroy($id)
     {
-        //
+        $listing = Listings::findOrFail($id);
+
+        // Also delete that logo listing
+        if ($listing->logo) {
+            Storage::delete($listing->logo);
+        }
+
+        $listing->delete();
+
+        return Redirect::route('listings.create')->with('success', "Success Delete Listing");
+
     }
 }
