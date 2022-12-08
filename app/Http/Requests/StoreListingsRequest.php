@@ -24,7 +24,13 @@ class StoreListingsRequest extends FormRequest
     public function rules()
     {
         return [
-            //
+            'title' => 'required|max:100',
+            'company' => 'required|unique:listings',
+            'location' => 'required|max:100',
+            'email' => 'required|email',
+            'website' => 'required|max:100',
+            'tags' => 'required',
+            'description' => 'required',
         ];
     }
 }
