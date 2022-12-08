@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\StoreListingsRequest;
 use App\Http\Requests\UpdateListingsRequest;
 use App\Models\Listings;
+use Illuminate\Http\Request;
 
 class ListingsController extends Controller
 {
@@ -13,11 +14,11 @@ class ListingsController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
         return view('pages.listings.index', [
             'heading' => 'Latest Listings',
-            'listings' => Listings::all()
+            'listings' => Listings::latest()->filter(request(['tag','search']))->get()
         ]);
     }
 

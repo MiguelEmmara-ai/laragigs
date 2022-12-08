@@ -15,15 +15,6 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('pages.listings.index', [
-        'heading' => 'Latest Listings',
-        'listings' => Listings::all()
-    ]);
-})->name('home');
-
-Route::resource('listings', ListingsController::class);
-
 // Common Resource Routes:
 // index - Show all listings
 // show - Show single listings
@@ -32,3 +23,7 @@ Route::resource('listings', ListingsController::class);
 // edit - Show form to edit listing
 // update - Updatelistings
 // destroy - Delete listings
+
+Route::get('/', [ListingsController::class, 'index'])->name('home');
+
+Route::resource('listings', ListingsController::class);
