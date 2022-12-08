@@ -1,6 +1,4 @@
-@extends('layouts.app')
-
-@section('content')
+<x-app>
     @include('includes.search')
 
     <a href="{{ route('home') }}" class="inline-block text-black ml-4 mb-4"><i class="fa-solid fa-arrow-left"></i> Back
@@ -10,7 +8,7 @@
             <div class="flex flex-col items-center justify-center text-center">
                 <img class="w-48 mr-6 mb-6" src="{{ asset('images/no-image.png') }}" alt="" />
 
-                <h3 class="text-2xl mb-2">{{ $listing->company }}</h3>
+                <h3 class="text-2xl mb-2">{{ $listing->title }}</h3>
                 <div class="text-xl font-bold mb-4">{{ $listing->company }}</div>
                 {{-- Listing-Tags --}}
                 <x-listing-tags :tagsCsv="$listing->tags" />
@@ -39,4 +37,4 @@
             </div>
         </x-card>
     </div>
-@endsection
+</x-app>
