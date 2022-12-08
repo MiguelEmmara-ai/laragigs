@@ -19,7 +19,7 @@ class ListingsController extends Controller
     {
         return view('pages.listings.index', [
             'heading' => 'Latest Listings',
-            'listings' => Listings::latest()->filter(request(['tag', 'search']))->get()
+            'listings' => Listings::latest()->filter(request(['tag', 'search']))->paginate(8)
         ]);
     }
 
@@ -45,6 +45,10 @@ class ListingsController extends Controller
     public function store(StoreListingsRequest $request)
     {
         $formFields = $request->all();
+
+        if ($request->hasFile('logo')) {
+            $formFields['logo'] = $request->file('logo')->store('logos', 'public');
+        }
 
         // Save listing records
         Listings::create($formFields);
