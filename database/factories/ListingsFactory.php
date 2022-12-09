@@ -17,6 +17,7 @@ class ListingsFactory extends Factory
     public function definition()
     {
         return [
+            'user_id' => mt_rand(1, 5),
             'title' => $this->faker->sentence(),
             'tags' => 'laravel, api, backend',
             'company' => $this->faker->company(),

@@ -10,7 +10,7 @@
             </li>
 
             <li>
-                <a href="{{ route('login') }}" class="hover:text-laravel"><i class="fa-solid fa-gear"></i>
+                <a href="{{ route('manage-listings') }}" class="hover:text-laravel"><i class="fa-solid fa-gear"></i>
                     Manage Listings</a>
             </li>
 

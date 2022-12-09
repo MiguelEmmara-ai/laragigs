@@ -26,22 +26,20 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', [ListingsController::class, 'index'])->name('home');
 
-
-
-
 Route::post('/login', [UserController::class, 'authenticate'])->name('authenticate-user');
 
 Route::post('/register/store', [UserController::class, 'store'])->name('store');
-
-Route::get('/listings/{id}', [ListingsController::class, 'show']);
 
 Route::middleware('guest')->group(function () {
      Route::get('/register', [UserController::class, 'register'])->name('register');
      Route::get('/login', [UserController::class, 'login'])->name('login');
 });
 
-
 Route::middleware('auth')->group(function () {
+     Route::get('/listings/manage', [ListingsController::class, 'manage'])->name('manage-listings');
      Route::resource('listings', ListingsController::class);
+
      Route::post('/logout', [UserController::class, 'logout'])->name('logout-user');
 });
+
+Route::get('/listings/{listing}', [ListingsController::class, 'show']);

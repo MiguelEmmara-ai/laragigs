@@ -6,6 +6,7 @@ use App\Http\Requests\StoreListingsRequest;
 use App\Http\Requests\UpdateListingsRequest;
 use App\Models\Listings;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Storage;
 
@@ -52,6 +53,8 @@ class ListingsController extends Controller
             $formFields['logo'] = $request->file('logo')->store('logos', 'public');
         }
 
+        $formFields['user_id'] = auth()->id();
+
         // Save listing records
         Listings::create($formFields);
 
@@ -97,22 +100,33 @@ class ListingsController extends Controller
      */
     public function update(UpdateListingsRequest $request, $id)
     {
-        $formFields = $request->all();
+        // Below Code generate using Open AI, shit is rly cool
 
+        // Find the listing to update
         $listing = Listings::findOrFail($id);
 
-        // Save logo file to storage/logos
-        if ($request->hasFile('logo')) {
-            // Will delete existing logo before storing new logos
-            if ($listing->logo) {
-                Storage::delete($listing->logo);
+        $formFields = $request->all();
+
+        // Check if the user is logged in and is the owner of the listing
+        if (Auth::check() && Auth::user()->id === $listing->user->id) {
+            // Save logo file to storage/logos
+            if ($request->hasFile('logo')) {
+                // Will delete existing logo before storing new logos
+                if ($listing->logo) {
+                    Storage::delete($listing->logo);
+                }
+                $formFields['logo'] = $request->file('logo')->store('logos', 'public');
             }
-            $formFields['logo'] = $request->file('logo')->store('logos', 'public');
+
+            // Update the listing with the new data
+            $listing->update($formFields);
+
+            // Redirect the user to the listing page with a success message
+            return back()->with('success', 'Listing updated successfully.');
+        } else {
+            // Redirect the user to the listing page with an error message
+            return back()->with('error', 'You are not authorized to update this listing.');
         }
-
-        $listing->update($formFields);
-
-        return back()->with('success', "Success Update Listing");
     }
 
     /**
@@ -133,6 +147,12 @@ class ListingsController extends Controller
         $listing->delete();
 
         return Redirect::route('listings.create')->with('success', "Success Delete Listing");
+    }
 
+    public function manage()
+    {
+        return view('pages.listings.manage', [
+            'listings' => Auth::user()->listings()->get()
+        ]);
     }
 }
