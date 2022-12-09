@@ -19,7 +19,7 @@ Learn the Laravel PHP framework from scratch by building a job listings applicat
 [laragigs.miguelemmara.me](https://laragigs.miguelemmara.me/)
 
 # Screenshots
-![Screenshot 1](https://github.com/MiguelEmmara-ai/dashr/blob/master/public/screenshots/screencapture-laragigs-2022-12-09-21_43_23.png)
+![Screenshot 1](https://github.com/MiguelEmmara-ai/laragigs/blob/master/public/screenshots/screencapture-laragigs-2022-12-09-21_43_23.png)
 
 Demo login
 ``` 
